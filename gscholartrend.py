@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     # Prepare http requests
     years = range(args.since, args.to + 1)
-    base_url = "https://scholar.google.ca/scholar?q=%s&as_ylo=%i&as_yhi=%i"
+    base_url = "https://scholar.google.ca/scholar?q=%s&as_ylo=%i&as_yhi=%i&hl=en"
     urls = [base_url % (keywords, i, i + 1) for i in years]
     headers = requests.utils.default_headers()
     headers.update(
