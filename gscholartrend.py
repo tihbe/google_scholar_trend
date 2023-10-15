@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     # Prepare http requests
     years = range(args.since, args.to + 1)
-    base_url = "https://scholar.google.ca/scholar?q=%s&as_ylo=%i&as_yhi=%i&hl=en"
+    base_url = "https://scholar.google.com/scholar?q=%s&as_ylo=%i&as_yhi=%i&hl=en"
     urls = [base_url % (keywords, i, i + 1) for i in years]
     headers = requests.utils.default_headers()
     headers.update(
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     # Download webpages and parse html
     reg = re.compile(".*About ((?:\d|,)+) results.*")
-    result_nbs = []
+    result_nbs = []; result_years = []
     for i, url in enumerate(urls):
         page = requests.get(url, headers=headers)
         m = reg.match(str(page.content))
@@ -45,7 +45,10 @@ if __name__ == "__main__":
             print("Error while parsing results", file=sys.stderr)
             if "Our systems have detected unusual traffic" in str(page.content):
                 print("Google is throttling your IP, consider using a proxy/VPN", file=sys.stderr)
-            exit(1)
+                exit(1)
+            else:
+                result_nbs.append(0)
+                continue
         r = int(m.group(1).replace(",", ""))
         print("%i: %i" % (years[i], r))
         result_nbs.append(r)
